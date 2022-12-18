@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostActivity" android:padding="10dp">
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical">
+      <org.imaginativeworld.whynotimagecarousel.ImageCarousel
+          android:id="@+id/carousel"
+          android:layout_width="fill_parent"
+          android:layout_height="300dp"
+      />
+      <TextView
+          android:text="90 р."
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/tvCost"
+          app:layout_constraintTop_toBottomOf="@+id/carousel" app:layout_constraintStart_toStartOf="parent"
+          style="@style/TextAppearance.AppCompat.Large"/>
+      <TextView
+          android:text="Одеяло Подушка ПРЕМИУМ Лебяжий пух"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/tvTitle"
+          app:layout_constraintTop_toBottomOf="@+id/tvCost" app:layout_constraintStart_toStartOf="parent"
+          style="@style/TextAppearance.AppCompat.Title"/>
+      <TextView
+          android:text="Барановичи"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/tvCity"
+          app:layout_constraintTop_toBottomOf="@+id/tvTitle" app:layout_constraintStart_toStartOf="parent"
+      />
+      <TextView
+          android:text="Сегодня, 14:36"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/tvDate"
+          app:layout_constraintTop_toBottomOf="@+id/tvCity" app:layout_constraintStart_toStartOf="parent"/>
+      <TextView
+          android:text="Описание"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/textView6"
+          app:layout_constraintTop_toBottomOf="@+id/tvDate" app:layout_constraintStart_toStartOf="parent"
+          style="@style/TextAppearance.AppCompat.Title" android:layout_marginTop="20dp"/>
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/tvDescription"
+          app:layout_constraintTop_toBottomOf="@+id/textView6" app:layout_constraintStart_toStartOf="parent"
+          android:text="В целом, конечно, консультация с широким активом требует определения и уточнения дальнейших направлений развития. С другой стороны, дальнейшее развитие различных форм деятельности требует определения и уточнения приоретизации разума над эмоциями. Но независимые государства ограничены исключительно образом мышления."
+          style="@style/TextAppearance.AppCompat.Body1"/>
+      <TextView
+          android:text="Контактная информация"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/textView8"
+          app:layout_constraintTop_toBottomOf="@+id/tvDescription" app:layout_constraintStart_toStartOf="parent"
+          style="@style/TextAppearance.AppCompat.Title" android:layout_marginTop="20dp"/>
+      <TextView
+          android:text="Ясность нашей позиции очевидна: современная методология разработки способствует повышению качества прогресса профессионального сообщества."
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/tvContacts"
+          app:layout_constraintTop_toBottomOf="@+id/textView8" app:layout_constraintStart_toStartOf="parent"
+          style="@style/TextAppearance.AppCompat.Body1"/>
+    </LinearLayout>
+  </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

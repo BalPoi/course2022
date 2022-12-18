@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "647970043654",
+    "project_id": "curse2022-fa309",
+    "storage_bucket": "curse2022-fa309.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647970043654:android:e9361e2d17bae264581087",
+        "android_client_info": {
+          "package_name": "by.gsu.bal.curse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647970043654-spvqrabcu8rmvde04mrh2ptpuctqaufs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWiZV0r675j3cxY0Z-k3Awqpr9yHpaBWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647970043654-spvqrabcu8rmvde04mrh2ptpuctqaufs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
