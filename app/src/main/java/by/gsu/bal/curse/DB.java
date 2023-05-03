@@ -5,13 +5,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class DB {
-    static public FirebaseDatabase database;
-    static public DatabaseReference postsRef;
-    static public DatabaseReference usersRef;
+public abstract class DB {
+    public static final FirebaseDatabase database;
+    public static final DatabaseReference postsRef;
+    public static final DatabaseReference usersRef;
 
-    static public FirebaseStorage imgStorage;
-    static public StorageReference imgRef;
+    public static final FirebaseStorage imgStorage;
+    public static final StorageReference imgRef;
 
     static {
         database = FirebaseDatabase.getInstance(Constants.DB_URL);
@@ -20,5 +20,8 @@ public class DB {
 
         imgStorage = FirebaseStorage.getInstance();
         imgRef = imgStorage.getReference();
+    }
+
+    private DB() {
     }
 }
