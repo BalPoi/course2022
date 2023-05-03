@@ -19,6 +19,9 @@
         <activity
                 android:name=".MapActivity"
                 android:exported="false" />
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyC9KQprRjc5rmMfuLF8WIZNCd-K1Ztq2bQ" />
         <activity
                 android:name=".MyPostsActivity"
                 android:exported="false"
