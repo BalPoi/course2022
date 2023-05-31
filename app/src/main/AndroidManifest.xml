@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
             android:allowBackup="true"
@@ -17,13 +19,29 @@
             android:theme="@style/Theme.Curse"
             tools:targetApi="31">
         <activity
-                android:name=".MapActivity"
+                android:name=".activities.PayActivity"
                 android:exported="false" />
-            <meta-data
+        <activity
+                android:name=".activities.ScooterRentActivity"
+                android:exported="false"
+                android:theme="@style/Theme.Curse.NoActionBar" />
+
+        <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyC9KQprRjc5rmMfuLF8WIZNCd-K1Ztq2bQ" />
+                android:value="AIzaSyAroN67CmmGsjqoslNq1FBo2rk18wBB2s8" />
+
         <activity
-                android:name=".MyPostsActivity"
+                android:name=".activities.MapActivity"
+                android:exported="true"
+                android:theme="@style/Theme.Curse.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".activities.MyPostsActivity"
                 android:exported="false"
                 android:theme="@style/Theme.Curse.NoActionBar">
             <meta-data
@@ -31,7 +49,7 @@
                     android:value="" />
         </activity>
         <activity
-                android:name=".PostActivity"
+                android:name=".activities.PostActivity"
                 android:exported="false"
                 android:theme="@style/Theme.Curse.NoActionBar">
             <meta-data
@@ -39,7 +57,7 @@
                     android:value="" />
         </activity>
         <activity
-                android:name=".LoginActivity"
+                android:name=".activities.LoginActivity"
                 android:exported="false"
                 android:theme="@style/Theme.Curse.NoActionBar">
             <meta-data
@@ -47,7 +65,7 @@
                     android:value="" />
         </activity>
         <activity
-                android:name=".EditPostActivity"
+                android:name=".activities.EditPostActivity"
                 android:exported="false"
                 android:label="@string/title_activity_edit_post"
                 android:theme="@style/Theme.Curse.NoActionBar">
@@ -56,19 +74,26 @@
                     android:value="" />
         </activity>
         <activity
-                android:name=".MainActivity"
+                android:name=".activities.MainActivity"
                 android:exported="true"
                 android:theme="@style/Theme.Curse.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
 
             <meta-data
                     android:name="android.app.lib_name"
                     android:value="" />
         </activity>
+        <activity
+                android:name=".CaptureAct"
+                android:screenOrientation="portrait"
+                android:stateNotNeeded="true"
+                android:theme="@style/zxing_CaptureTheme" />
     </application>
 
 </manifest>

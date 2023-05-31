@@ -1,4 +1,4 @@
-package by.gsu.bal.curse;
+package by.gsu.bal.curse.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,22 +14,30 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
+import by.gsu.bal.curse.Constants;
+import by.gsu.bal.curse.R;
+import by.gsu.bal.curse.UserPosts;
+
 public class LoginActivity extends AppCompatActivity {
+
     private final String TAG = "LoginActivity";
     private EditText etEmail;
     private EditText etPassword;
-
-    private FirebaseDatabase database;
     private DatabaseReference usersRef;
-
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        init();
 
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance(Constants.DB_URL);
+        usersRef = database.getReference(Constants.USERS_KEY);
+
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public void onClickBtnSignUp(View view) {
@@ -99,16 +107,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    private void init() {
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-
-        database = FirebaseDatabase.getInstance(Constants.DB_URL);
-        usersRef = database.getReference(Constants.USERS_KEY);
-
-        mAuth = FirebaseAuth.getInstance();
     }
 
     private void showToast(String message) {

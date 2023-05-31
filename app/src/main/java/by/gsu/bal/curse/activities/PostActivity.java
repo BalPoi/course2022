@@ -1,4 +1,4 @@
-package by.gsu.bal.curse;
+package by.gsu.bal.curse.activities;
 
 import android.content.Intent;
 import android.util.Log;
@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import by.gsu.bal.curse.Constants;
+import by.gsu.bal.curse.Post;
+import by.gsu.bal.curse.R;
 
 public class PostActivity extends AppCompatActivity {
     TextView tvTitle, tvCost, tvCity, tvDate, tvDescription, tvContacts;

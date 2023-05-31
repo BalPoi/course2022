@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MapActivity">
+        tools:context=".activities.MapActivity">
 
     <com.google.android.gms.maps.MapView
             android:layout_width="0dp"
@@ -13,15 +13,119 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:apiKey="AIzaSyC9KQprRjc5rmMfuLF8WIZNCd-K1Ztq2bQ" />
+
+    <Button
+        android:id="@+id/btnScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:onClick="onClickBtnScan"
+        android:text="Сканировать"
+        app:layout_constraintBottom_toBottomOf="@+id/mapView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+            android:text="tvUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvCurrentUserEmail"
+            android:background="#9C27B0"
+            android:padding="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-            android:text="Сканировать"
+            android:text="Выйти"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
+            android:id="@+id/btnSignOut"
+            android:onClick="onClickBtnSignOut"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="10dp" />
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hapticFeedbackEnabled="false"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center|center_horizontal"
+            android:id="@+id/llRentedScooter"
+            android:background="#CCFFEB3B"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginStart="60dp">
+
+        <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/scooter_icon"
+                android:id="@+id/imageView" />
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvModelName"
+                    android:textSize="12pt"
+                    android:text="Scooter"
+                    android:textColor="#000000" />
+
+            <TextView
+                    android:text="123ABC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvScooterCode"
+                    android:textColor="#000000" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <TextView
+                        android:text="100%"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvChargePercentage"
+                        android:textColor="#000000"
+                        tools:layout_editor_absoluteY="0dp"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                        android:text="ТАЙМЕР"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView"
+                        app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+            android:text="Закончить"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnEndRent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/mapView"
+            android:onClick="onClickBtnEndRent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="20dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

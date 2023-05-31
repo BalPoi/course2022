@@ -1,8 +1,8 @@
-package by.gsu.bal.curse;
+package by.gsu.bal.curse.activities;
 
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,13 +10,17 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import by.gsu.bal.curse.DB;
+import by.gsu.bal.curse.MyRecyclerViewInterface;
+import by.gsu.bal.curse.Post;
+import by.gsu.bal.curse.R;
 
 public class MyPostsActivity extends AppCompatActivity implements MyRecyclerViewInterface {
     private final String TAG = "MyPostsActivity";

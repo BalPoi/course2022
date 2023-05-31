@@ -1,4 +1,4 @@
-package by.gsu.bal.curse;
+package by.gsu.bal.curse.activities;
 
 import static android.widget.Toast.makeText;
 
@@ -25,6 +25,11 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
+
+import by.gsu.bal.curse.Constants;
+import by.gsu.bal.curse.DB;
+import by.gsu.bal.curse.Post;
+import by.gsu.bal.curse.R;
 
 public class EditPostActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_MULTIPLE = 0;

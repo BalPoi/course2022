@@ -2,13 +2,19 @@ package by.gsu.bal.curse;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.annotation.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Post implements Parcelable {
+    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
     public String id;
     public String title;
     public String description;
@@ -17,15 +23,21 @@ public class Post implements Parcelable {
     public double cost;
     public String contacts;
     public String userID;
-
     public ArrayList<String> imagesURLs;
-
 
     public Post() {
     }
 
-    public Post(String id, String title, String description, String city,
-                String publicationDate, String cost, String contacts, String userID, ArrayList<String> imagesURLs) {
+    public Post(
+            String id,
+            String title,
+            String description,
+            String city,
+            String publicationDate,
+            String cost,
+            String contacts,
+            String userID,
+            ArrayList<String> imagesURLs) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -41,7 +53,8 @@ public class Post implements Parcelable {
         this.imagesURLs = imagesURLs;
     }
 
-    public Post(Parcel  in) {
+
+    public Post(Parcel in) {
         this.id = in.readString();
         this.title = in.readString();
         this.description = in.readString();
@@ -54,7 +67,6 @@ public class Post implements Parcelable {
         this.imagesURLs = new ArrayList<>();
         in.readList(imagesURLs, String.class.getClassLoader());
     }
-
 
     public String getId() {
         return id;
@@ -112,8 +124,6 @@ public class Post implements Parcelable {
         this.contacts = contacts;
     }
 
-
-
     public String getUserID() {
         return userID;
     }
@@ -133,14 +143,27 @@ public class Post implements Parcelable {
     @Override
     public String toString() {
         return "Post{" +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", city='" + city + '\'' +
-                ", publicationDate='" + publicationDate + '\'' +
-                ", cost=" + cost +
-                ", contacts='" + contacts + '\'' +
-                ", userID='" + userID + '\'' +
-                '}';
+               ", title='" +
+               title +
+               '\'' +
+               ", description='" +
+               description +
+               '\'' +
+               ", city='" +
+               city +
+               '\'' +
+               ", publicationDate='" +
+               publicationDate +
+               '\'' +
+               ", cost=" +
+               cost +
+               ", contacts='" +
+               contacts +
+               '\'' +
+               ", userID='" +
+               userID +
+               '\'' +
+               '}';
     }
 
     @Override
@@ -160,15 +183,5 @@ public class Post implements Parcelable {
         parcel.writeString(userID);
         parcel.writeList(imagesURLs);
     }
-
-    public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {
-        public Post createFromParcel(Parcel in) {
-            return new Post(in);
-        }
-
-        public Post[] newArray(int size) {
-            return new Post[size];
-        }
-    };
 
 }

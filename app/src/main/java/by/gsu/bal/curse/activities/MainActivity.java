@@ -1,4 +1,4 @@
-package by.gsu.bal.curse;
+package by.gsu.bal.curse.activities;
 
 import static by.gsu.bal.curse.DB.postsRef;
 
@@ -27,6 +27,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import by.gsu.bal.curse.MyRecyclerViewInterface;
+import by.gsu.bal.curse.Post;
+import by.gsu.bal.curse.R;
 
 public class MainActivity extends AppCompatActivity implements MyRecyclerViewInterface {
     private final String TAG = "MainActivity";
@@ -71,9 +75,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewInt
 
     @Override
     public void onCreateContextMenu(
-            ContextMenu menu,
-            View v,
-            ContextMenu.ContextMenuInfo menuInfo) {
+            ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (user != null) {
             menu.setHeaderTitle("Профиль");

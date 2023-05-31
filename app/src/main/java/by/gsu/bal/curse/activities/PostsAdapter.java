@@ -1,8 +1,6 @@
-package by.gsu.bal.curse;
+package by.gsu.bal.curse.activities;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +13,14 @@ import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+
+import by.gsu.bal.curse.Constants;
+import by.gsu.bal.curse.MyRecyclerViewInterface;
+import by.gsu.bal.curse.Post;
+import by.gsu.bal.curse.R;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder> {
     Context context;

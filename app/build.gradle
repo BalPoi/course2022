@@ -1,16 +1,17 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id "io.freefair.lombok" version "8.0.1"
 }
 
 android {
     namespace 'by.gsu.bal.curse'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "by.gsu.bal.curse"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -24,12 +25,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding true
     }
+    buildToolsVersion '33.0.2'
 }
 
 dependencies {
@@ -53,13 +55,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-storage'
 
-//    implementation 'com.firebaseui:firebase-ui-database:6.4.0'
-//    implementation 'com.google.android.material:material:1.1.0'
-
     implementation 'com.squareup.picasso:picasso:2.8'
 
     // Circle Indicator (To fix the xml preview "Missing classes" error)
     implementation 'me.relex:circleindicator:2.1.6'
     implementation 'org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0'
 
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }
