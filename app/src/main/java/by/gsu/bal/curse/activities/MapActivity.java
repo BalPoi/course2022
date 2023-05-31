@@ -5,16 +5,22 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -32,11 +38,31 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import by.gsu.bal.curse.CaptureAct;
 import by.gsu.bal.curse.R;
+import by.gsu.bal.curse.ScooterService;
 import by.gsu.bal.curse.models.Scooter;
+import by.gsu.bal.curse.models.ScooterStatus;
 
+@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private final String TAG = "MapActivity";
+    TextView timer;
+    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
+    Handler handler;
+    int Seconds, Minutes, MilliSeconds;
+    public Runnable runnable = new Runnable() {
+        public void run() {
+            MillisecondTime = SystemClock.uptimeMillis() - StartTime;
+            UpdateTime = TimeBuff + MillisecondTime;
+            Seconds = (int) (UpdateTime / 1000);
+            Minutes = Seconds / 60;
+            Seconds = Seconds % 60;
+            MilliSeconds = (int) (UpdateTime % 1000);
+            timer.setText("" + Minutes + ":" + String.format("%02d", Seconds));
+            handler.postDelayed(this, 0);
+        }
+
+    };
     private Scooter rentedScooter;
     private TextView tvModelName;
     private TextView tvScooterCode;
@@ -50,11 +76,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FirebaseUser user;
     private TextView tvCurrentUserEmail;
     private LinearLayout llRentedScooter;
-    ActivityResultLauncher<Intent> rentScooterLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
+    ActivityResultLauncher<Intent> rentScooterLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            (ActivityResult result) -> {
                 if (result != null && result.getResultCode() == Activity.RESULT_OK) {
+                    // Момент после аренды самоката
+                    assert result.getData() != null;
+                    Log.i(TAG, "mapActivity: trying parce rentedScooter");
                     rentedScooter = result.getData().getParcelableExtra("rentedScooter");
-                    // todo: таймер и заменить кнопку скана на окончание аренды
+                    Log.i(TAG, "mapActivity: rentedScooter=" + rentedScooter);
+                    Log.i(TAG, "timer: init");
+                    StartTime = SystemClock.uptimeMillis();
+                    handler.postDelayed(runnable, 0);
+                    Log.i(TAG, "timer: done");
 
                     tvModelName.setText(rentedScooter.getModelName());
                     tvScooterCode.setText(rentedScooter.getCode());
@@ -65,15 +98,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     btnEndRent.setVisibility(View.VISIBLE);
                 }
             });
-    ActivityResultLauncher<ScanOptions> scanQrCodeLauncher = registerForActivityResult(
-            new ScanContract(),
-            result -> {
-                if (result.getContents() != null) {
-                    Intent intent = new Intent(this, ScooterRentActivity.class);
-                    intent.putExtra("scooterCode", result.getContents());
-                    rentScooterLauncher.launch(intent);
-                }
-            });
+    ActivityResultLauncher<ScanOptions> scanQrCodeLauncher = registerForActivityResult(new ScanContract(), result -> {
+        if (result.getContents() != null) {
+            // Момент после отсканирования QR кода
+            Log.i(TAG, "afterScan: scanned code=" + result.getContents());
+            Intent intent = new Intent(this, ScooterRentActivity.class);
+            // if (ScooterService.isScooterAvailable(result.getContents())) {
+                intent.putExtra("scooterCode", result.getContents());
+                rentScooterLauncher.launch(intent);
+            // } else Toast.makeText(this, "Этот самокат недоступен", Toast.LENGTH_SHORT).show();       // fixme
+        }
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +123,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         tvChargePercentage = findViewById(R.id.tvChargePercentage);
         btnEndRent = findViewById(R.id.btnEndRent);
         btnScan = findViewById(R.id.btnScan);
+        timer = (TextView) findViewById(R.id.tvTimer);
+
+        handler = new Handler();
 
         if (rentedScooter == null) {
             llRentedScooter.setVisibility(View.GONE);
@@ -151,20 +189,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.googlemap_style)));
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-            PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
 
             // TODO: process if permissions have not been grant
             // @Override
             // public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1);
         }
         mMap.setMyLocationEnabled(true);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(52.424191806718994, 31.013596531419353), 10F));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.424191806718994, 31.013596531419353), 10F));
 
 
         // mMap.addMarker(new MarkerOptions().)
@@ -177,19 +213,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onClickBtnScan(View view) {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to flash on");
-        options.setBeepEnabled(true);
+        options.setBeepEnabled(false);
         options.setOrientationLocked(true);
         options.setCaptureActivity(CaptureAct.class);
         scanQrCodeLauncher.launch(options);
     }
 
     public void onClickBtnEndRent(View view) {
+        ScooterService.updateScooterStatus(rentedScooter, ScooterStatus.FREE);
         rentedScooter = null;
         llRentedScooter.setVisibility(View.GONE);
         btnEndRent.setVisibility(View.GONE);
         btnScan.setVisibility(View.VISIBLE);
         Intent intent = new Intent(this, PayActivity.class);
-        intent.putExtra("seconds", 300); // todo: remove hardcode
+        Log.i(TAG, "onClickBtnEndRent: rent seconds="+Seconds);
+        intent.putExtra("seconds", Seconds);
+
+        MillisecondTime = 0L;
+        StartTime = 0L;
+        TimeBuff = 0L;
+        UpdateTime = 0L;
+        Seconds = 0;
+        Minutes = 0;
+        MilliSeconds = 0;
+        timer.setText("00:00:00");
+
         startActivity(intent);
     }
 }

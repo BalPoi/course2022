@@ -3,6 +3,8 @@ package by.gsu.bal.curse.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class Scooter implements Parcelable {
 
     public static final Creator<Scooter> CREATOR = new Creator<Scooter>() {
@@ -20,38 +22,14 @@ public class Scooter implements Parcelable {
     private Long charge;
     private String modelName;
     private String status;
-
-
-    public Scooter() {
-    }
+    private String stationId;
 
     protected Scooter(Parcel in) {
         code = in.readString();
-        if (in.readByte() == 0) {
-            charge = null;
-        } else {
-            charge = in.readLong();
-        }
+        if (in.readByte() == 0) {charge = null;} else {charge = in.readLong();}
         modelName = in.readString();
         status = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(code);
-        if (charge == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(charge);
-        }
-        dest.writeString(modelName);
-        dest.writeString(status);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        stationId = in.readString();
     }
 
     public String getCode() {
@@ -84,5 +62,53 @@ public class Scooter implements Parcelable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(String stationId) {
+        this.stationId = stationId;
+    }
+
+    @Override
+    public String toString() {
+        return "Scooter{" +
+               "code='" +
+               code +
+               '\'' +
+               ", charge=" +
+               charge +
+               ", modelName='" +
+               modelName +
+               '\'' +
+               ", status='" +
+               status +
+               '\'' +
+               ", stationId='" +
+               stationId +
+               '\'' +
+               '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(code);
+        if (charge == null) {dest.writeByte((byte) 0);} else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(charge);
+        }
+        dest.writeString(modelName);
+        dest.writeString(status);
+        dest.writeString(stationId);
+    }
+
+    public Scooter() {
     }
 }

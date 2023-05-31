@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvCurrentUserEmail"
-            android:background="#9C27B0"
+            android:background="#00000000"
             android:padding="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -109,8 +109,9 @@
                         android:text="ТАЙМЕР"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:id="@+id/tvTimer"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="#000000" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
