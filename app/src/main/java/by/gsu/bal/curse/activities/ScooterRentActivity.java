@@ -1,6 +1,7 @@
 package by.gsu.bal.curse.activities;
 
 import static by.gsu.bal.curse.ScooterService.isScooterAvailable;
+import static by.gsu.bal.curse.ScooterService.unlockScooter;
 import static by.gsu.bal.curse.ScooterService.updateScooterStatus;
 
 import android.content.Intent;
@@ -55,9 +56,10 @@ public class ScooterRentActivity extends AppCompatActivity {
             intent.putExtra("rentedScooter", rentedScooter);
             setResult(RESULT_OK, intent);
             updateScooterStatus(rentedScooter, ScooterStatus.BUSY);
-            Log.i(TAG, "onClickBtnRent: scooter rented");
+            unlockScooter(rentedScooter);
+            Log.i(TAG, "onClickBtnRent: scooter has been rented.");
         } else {
-            Toast.makeText(this, "Этот самокат уже недоступен", Toast.LENGTH_SHORT).show();      // fixme
+            Toast.makeText(this, "Этот самокат уже недоступен", Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED, intent);
             Log.i(TAG, "onClickBtnRent: scooter busy");
         }

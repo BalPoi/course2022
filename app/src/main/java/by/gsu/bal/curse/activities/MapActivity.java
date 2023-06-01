@@ -2,6 +2,10 @@ package by.gsu.bal.curse.activities;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static by.gsu.bal.curse.ScooterService.isScooterParked;
+import static by.gsu.bal.curse.ScooterService.lockScooter;
+import static by.gsu.bal.curse.ScooterService.updateScooterStatus;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -33,17 +37,28 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
+import com.google.maps.android.clustering.ClusterManager;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import by.gsu.bal.curse.CaptureAct;
+import by.gsu.bal.curse.DB;
 import by.gsu.bal.curse.R;
 import by.gsu.bal.curse.ScooterService;
+import by.gsu.bal.curse.components.MyMarkerRenderer;
+import by.gsu.bal.curse.components.StationMarker;
 import by.gsu.bal.curse.models.Scooter;
 import by.gsu.bal.curse.models.ScooterStatus;
+import by.gsu.bal.curse.models.Station;
 
 @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, ClusterManager.OnClusterClickListener,
+        ClusterManager.OnClusterItemClickListener {
 
     private final String TAG = "MapActivity";
     TextView timer;
@@ -70,6 +85,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Button btnEndRent;
     private Button btnScan;
     private GoogleMap mMap;
+    private ClusterManager<StationMarker> stationMarkerClusterManager;
     private MapView mMapView;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateChangeListener;
@@ -103,10 +119,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // Момент после отсканирования QR кода
             Log.i(TAG, "afterScan: scanned code=" + result.getContents());
             Intent intent = new Intent(this, ScooterRentActivity.class);
-            // if (ScooterService.isScooterAvailable(result.getContents())) {
-                intent.putExtra("scooterCode", result.getContents());
-                rentScooterLauncher.launch(intent);
-            // } else Toast.makeText(this, "Этот самокат недоступен", Toast.LENGTH_SHORT).show();       // fixme
+            intent.putExtra("scooterCode", result.getContents());
+            rentScooterLauncher.launch(intent);
         }
     });
 
@@ -202,8 +216,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.424191806718994, 31.013596531419353), 10F));
 
+        stationMarkerClusterManager = new ClusterManager<>(this, mMap);
+        MyMarkerRenderer myMarkerRenderer = new MyMarkerRenderer(this, googleMap, stationMarkerClusterManager);
+        stationMarkerClusterManager.setRenderer(myMarkerRenderer);
 
-        // mMap.addMarker(new MarkerOptions().)
+        stationMarkerClusterManager.setOnClusterClickListener(this);
+        stationMarkerClusterManager.setOnClusterItemClickListener(this);
+        mMap.setOnCameraIdleListener(stationMarkerClusterManager);
+        mMap.setOnMarkerClickListener(stationMarkerClusterManager);
+
+        DB.stationsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                stationMarkerClusterManager.clearItems();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Station station = child.getValue(Station.class);
+                    stationMarkerClusterManager.addItem(new StationMarker(station));
+                }
+                stationMarkerClusterManager.cluster();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // ignore
+            }
+        });
     }
 
     public void onClickBtnSignOut(View view) {
@@ -220,13 +257,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void onClickBtnEndRent(View view) {
-        ScooterService.updateScooterStatus(rentedScooter, ScooterStatus.FREE);
+        if (!isScooterParked(rentedScooter)) {
+            Toast.makeText(this, "Присоедините самокат к станции", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        lockScooter(rentedScooter);
+        updateScooterStatus(rentedScooter, ScooterStatus.FREE);
         rentedScooter = null;
         llRentedScooter.setVisibility(View.GONE);
         btnEndRent.setVisibility(View.GONE);
         btnScan.setVisibility(View.VISIBLE);
         Intent intent = new Intent(this, PayActivity.class);
-        Log.i(TAG, "onClickBtnEndRent: rent seconds="+Seconds);
+        Log.i(TAG, "onClickBtnEndRent: rent seconds=" + Seconds);
         intent.putExtra("seconds", Seconds);
 
         MillisecondTime = 0L;
@@ -239,5 +281,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         timer.setText("00:00:00");
 
         startActivity(intent);
+    }
+
+    void animateZoomInCamera(LatLng latLng) {
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+    @Override
+    public boolean onClusterClick(Cluster cluster) {
+        animateZoomInCamera(cluster.getPosition());
+        return false;
+    }
+
+    @Override
+    public boolean onClusterItemClick(ClusterItem item) {
+        animateZoomInCamera(item.getPosition());
+        return false;
     }
 }

@@ -19,7 +19,7 @@ public class PayActivity extends AppCompatActivity {
 
         tvBill = findViewById(R.id.tvBill);
         int seconds = getIntent().getIntExtra("seconds", 0);
-        Double bill = calcBill(seconds, 1.0, 0.1); // todo: remove hardcode
+        Double bill = calcBill(seconds, 1.0, 0.1);
         tvBill.setText(String.format("%.2f", bill));
     }
 

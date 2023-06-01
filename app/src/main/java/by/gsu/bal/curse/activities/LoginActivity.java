@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                                 showToast("Невалидный email");
                                 break;
                             case "The given password is invalid. [ Password should be at least 6 characters ]":
-                                showToast("Пароль должен быть некороче 6");
+                                showToast("Пароль должен быть не короче 6");
                                 break;
                             case "The email address is already in use by another account.":
                                 showToast("Email уже занят");

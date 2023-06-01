@@ -18,7 +18,7 @@ public class ScooterService {
     public static boolean isScooterAvailable(String scooterCode) {
         Task<DataSnapshot> status = DB.scootersRef.child(scooterCode).child("status").get();
         do {} while (!status.isComplete());
-        Log.i(TAG, "isScooterAvailable: scooter status="+status.getResult().toString());
+        Log.i(TAG, "isScooterAvailable: scooter status=" + status.getResult().toString());
         return Objects.equals(status.getResult().getValue(String.class), ScooterStatus.FREE.toString());
     }
 
@@ -33,5 +33,22 @@ public class ScooterService {
         Task<DataSnapshot> freeSlots = DB.stationsRef.child(stationId).child("freeSlots").get();
         do {} while (!freeSlots.isComplete());
         DB.stationsRef.child(stationId).child("freeSlots").setValue(freeSlots.getResult().getValue(Integer.class) + 1);
+    }
+
+
+    public static void unlockScooter(Scooter scooter) {
+        DB.scootersRef.child(scooter.getCode()).child("isBlocked").setValue(false);
+        Log.i(TAG, "unlockScooter: scooter " + scooter.getCode() + " has been blocked.");
+    }
+
+    public static void lockScooter(Scooter scooter) {
+        DB.scootersRef.child(scooter.getCode()).child("isBlocked").setValue(true);
+        Log.i(TAG, "lockScooter: scooter " + scooter.getCode() + " has been blocked.");
+    }
+
+    public static Boolean isScooterParked(Scooter scooter) {
+        Task<DataSnapshot> isParked = DB.scootersRef.child(scooter.getCode()).child("isParked").get();
+        do {} while (!isParked.isSuccessful());
+        return isParked.getResult().getValue(Boolean.class);
     }
 }
